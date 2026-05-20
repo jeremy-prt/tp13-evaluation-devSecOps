@@ -1,0 +1,5 @@
+DRIVER    VOLUME NAME
+local     tp13_grafana-data
+local     tp13_portainer-data
+local     tp13_prometheus-data
+local     tp13_registry-data
