@@ -1,0 +1,32 @@
+services:
+  registry:
+    image: registry:2
+    ports:
+      - "${PORT_REGISTRY}:5000"
+    environment:
+      REGISTRY_STORAGE_DELETE_ENABLED: "true"
+    volumes:
+      - registry-data:/var/lib/registry
+    networks:
+      - registry-net
+
+  registry-ui:
+    image: joxit/docker-registry-ui:main
+    ports:
+      - "${PORT_REGISTRY_UI}:80"
+    environment:
+      REGISTRY_TITLE: Registry TP13
+      NGINX_PROXY_PASS_URL: http://registry:5000
+      DELETE_IMAGES: "true"
+      SINGLE_REGISTRY: "true"
+    depends_on:
+      - registry
+    networks:
+      - registry-net
+
+volumes:
+  registry-data:
+
+networks:
+  registry-net:
+    driver: bridge
