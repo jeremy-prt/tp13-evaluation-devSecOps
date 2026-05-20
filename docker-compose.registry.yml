@@ -11,7 +11,7 @@ services:
       - registry-net
 
   registry-ui:
-    image: joxit/docker-registry-ui:main
+    image: joxit/docker-registry-ui:2.6.0
     ports:
       - "${PORT_REGISTRY_UI}:80"
     environment:

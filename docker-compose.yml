@@ -32,7 +32,7 @@ services:
       - tp13-net
 
   prometheus:
-    image: prom/prometheus:latest
+    image: prom/prometheus:v3.11.3
     ports:
       - "${PORT_PROMETHEUS}:9090"
     volumes:
@@ -42,7 +42,7 @@ services:
       - tp13-net
 
   grafana:
-    image: grafana/grafana:latest
+    image: grafana/grafana:13.0.1
     ports:
       - "${PORT_GRAFANA}:3000"
     volumes:
@@ -55,7 +55,7 @@ services:
       - tp13-net
 
   node-exporter:
-    image: prom/node-exporter:latest
+    image: prom/node-exporter:v1.11.1
     pid: host
     volumes:
       - /proc:/host/proc:ro
@@ -69,7 +69,7 @@ services:
       - tp13-net
 
   cadvisor:
-    image: gcr.io/cadvisor/cadvisor:latest
+    image: gcr.io/cadvisor/cadvisor:v0.55.1
     privileged: true
     volumes:
       - /:/rootfs:ro
@@ -80,7 +80,7 @@ services:
       - tp13-net
 
   portainer:
-    image: portainer/portainer-ce:latest
+    image: portainer/portainer-ce:2.41.1
     ports:
       - "${PORT_PORTAINER}:9000"
     volumes:
