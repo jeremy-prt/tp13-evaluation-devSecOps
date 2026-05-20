@@ -31,6 +31,69 @@ services:
     networks:
       - tp13-net
 
+  prometheus:
+    image: prom/prometheus:latest
+    ports:
+      - "${PORT_PROMETHEUS}:9090"
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus-data:/prometheus
+    networks:
+      - tp13-net
+
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - "${PORT_GRAFANA}:3000"
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - ./monitoring/grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./monitoring/grafana/dashboards:/var/lib/grafana/dashboards:ro
+    depends_on:
+      - prometheus
+    networks:
+      - tp13-net
+
+  node-exporter:
+    image: prom/node-exporter:latest
+    pid: host
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command:
+      - --path.procfs=/host/proc
+      - --path.sysfs=/host/sys
+      - --path.rootfs=/rootfs
+    networks:
+      - tp13-net
+
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:latest
+    privileged: true
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+    networks:
+      - tp13-net
+
+  portainer:
+    image: portainer/portainer-ce:latest
+    ports:
+      - "${PORT_PORTAINER}:9000"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer-data:/data
+    networks:
+      - tp13-net
+
 networks:
   tp13-net:
     driver: bridge
+
+volumes:
+  prometheus-data:
+  grafana-data:
+  portainer-data:
